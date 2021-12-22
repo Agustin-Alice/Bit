@@ -1,20 +1,14 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import Selector from './Components/Selector';
 
-
-const App = ()=> {
+const App = () => {
   return (
     <div className="App">
       <FormControl>
-        <Selector/>
+        <Selector />
       </FormControl>
-      
     </div>
   );
-}
-
-
+};
 
 export default App;
