@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Select from '@material-ui/core/Select';
 import {
   FormControl,
@@ -7,8 +7,9 @@ import {
   MenuItem,
 } from '@material-ui/core';
 import Selects from './Selects.js';
+// let idInterval;
 
-const Selector = (props) => {
+const Selector = () => {
   const [listCoins, setListCoins] = useState([]);
   const [listCoinsVs, setListCoinsVs] = useState([]);
   const [price, setPrice] = useState('');
@@ -18,7 +19,6 @@ const Selector = (props) => {
   const handleList = setListCoins;
 
   const handleListVs = (list) => {
-    // name.map((element) => console.log(element));
     setListCoinsVs(list);
   };
   const handleCoin = (event) => {
@@ -33,10 +33,7 @@ const Selector = (props) => {
 
   const handlePrice = (event) => {
     const price = event[coin][coinVs];
-    // console.log(price);
-    // console.log(coinVs);
-    // console.log(coin);
-    // console.log(event);
+    console.log(price);
     setPrice(price);
   };
 
@@ -56,14 +53,25 @@ const Selector = (props) => {
     if (coin === undefined || coinVs === undefined) {
       return console.log('casi');
     } else {
-      fetch(
-        `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=${coinVs}`
-      ) // coin tiene adentro id y symbol.
-        .then((res) => res.json())
-        .then((result) => handlePrice(result));
+      searchPrice();
+      switchInterval();
     }
   }, [coin, coinVs]);
 
+  const searchPrice = () => {
+    fetch(
+      `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=${coinVs}`
+    ) // coin tiene adentro id y symbol.
+      .then((res) => res.json())
+      .then((result) => handlePrice(result));
+  };
+  const idInterval = useRef();
+  const switchInterval = () => {
+    console.log(idInterval);
+    // usar useRef() en ves de la variable global
+    clearInterval(idInterval.current);
+    idInterval.current = setInterval(searchPrice, 5000);
+  };
   return (
     <FormControl>
       <Selects
@@ -88,11 +96,11 @@ export default Selector;
 // }
 
 // useEffect(() => {
-//     setInterval(() =>{
-//     fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
-//     .then(res => res.json())
-//     .then(result => handleCoin(result))
-//     }, 10000);
+// setInterval(() => {
+//   fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
+//     .then((res) => res.json())
+//     .then((result) => handleCoin(result));
+// }, 10000);
 // },[])
 
 // <FormControl>
