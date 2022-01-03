@@ -1,13 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import Select from '@material-ui/core/Select';
-import {
-  FormControl,
-  InputLabel,
-  makeStyles,
-  MenuItem,
-} from '@material-ui/core';
+import { FormControl } from '@material-ui/core';
 import Selects from './Selects.js';
-// let idInterval;
 
 const Selector = () => {
   const [listCoins, setListCoins] = useState([]);
@@ -18,9 +11,8 @@ const Selector = () => {
 
   const handleList = setListCoins;
 
-  const handleListVs = (list) => {
-    setListCoinsVs(list);
-  };
+  const handleListVs = setListCoinsVs;
+
   const handleCoin = (event) => {
     const coin = event.target.value;
     setCoin(coin);
@@ -33,7 +25,6 @@ const Selector = () => {
 
   const handlePrice = (event) => {
     const price = event[coin][coinVs];
-    console.log(price);
     setPrice(price);
   };
 
@@ -61,14 +52,12 @@ const Selector = () => {
   const searchPrice = () => {
     fetch(
       `https://api.coingecko.com/api/v3/simple/price?ids=${coin}&vs_currencies=${coinVs}`
-    ) // coin tiene adentro id y symbol.
+    )
       .then((res) => res.json())
       .then((result) => handlePrice(result));
   };
   const idInterval = useRef();
   const switchInterval = () => {
-    console.log(idInterval);
-    // usar useRef() en ves de la variable global
     clearInterval(idInterval.current);
     idInterval.current = setInterval(searchPrice, 5000);
   };
@@ -88,34 +77,3 @@ const Selector = () => {
 };
 
 export default Selector;
-
-// const handleCoin = (prices) =>{
-//     console.log(prices)
-//     let str = coin
-//     setPrice(prices.str.usd)
-// }
-
-// useEffect(() => {
-// setInterval(() => {
-//   fetch('https://api.coingecko.com/api/v3/simple/supported_vs_currencies')
-//     .then((res) => res.json())
-//     .then((result) => handleCoin(result));
-// }, 10000);
-// },[])
-
-// <FormControl>
-//             <InputLabel htmlFor='Selector'>Cripto</InputLabel>
-//             <Select
-//                 labelid= 'Select-Crypto'
-//                 id= 'Selector'
-//                 // onChange = {handleChange}
-//                 >
-
-//             <MenuItem value = {''} aria-label ='None'></MenuItem>
-//             <MenuItem value = {'bitcoin'}>BTC</MenuItem>
-//             <MenuItem value = {'ethereum'}>ETH</MenuItem>
-//             <MenuItem value = {'vechain'}>VET</MenuItem>
-
-//             </Select>
-
-//         </FormControl>
